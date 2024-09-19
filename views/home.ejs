@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center">
+    <div class="bg-white p-8 shadow-lg rounded-lg w-full max-w-md">
+      <h1 class="text-2xl font-bold text-gray-800 mb-4">
+        Welcome, <%= user.name %> of age <%= user.age %>
+      </h1>
+      <h3 class="text-gray-600 mb-6">
+        Your email id: <span class="font-medium"><%= user.email %></span>
+      </h3>
+      <form action="/logout" method="post" class="mb-6">
+        <input
+          type="submit"
+          value="Log Out"
+          class="w-full bg-red-500 text-white font-semibold py-2 rounded-lg hover:bg-red-600 transition duration-300"
+        />
+      </form>
+      
+      <h3 class="text-lg font-semibold text-gray-800 mb-3">Post Your Thought</h3>
+      <form action="/newpost/<%= user._id %>" method="post" class="mb-6">
+        <textarea
+          name="content"
+          placeholder="What is in your mind..."
+          class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        ></textarea>
+        <input
+          type="submit"
+          value="Create Post"
+          class="mt-4 w-full bg-indigo-500 text-white font-semibold py-2 rounded-lg hover:bg-indigo-600 transition duration-300"
+        />
+      </form>
+
+      <h3 class="text-lg font-semibold text-gray-800 mb-3">Your Posts</h3>
+      <% user.posts.forEach(post => { %>
+        <div class="bg-gray-50 p-4 rounded-lg mb-3 shadow-sm">
+          <h4 class="text-gray-700"><%= post.content %></h4>
+        </div>
+      <% }) %>
+    </div>
+  </body>
+</html>
