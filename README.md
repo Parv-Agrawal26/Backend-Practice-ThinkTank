@@ -2,7 +2,7 @@
 **Note: This is a mini backend practice project!**
 #
 
-**ThinkTank** is a thought-sharing web application that allows users to store their ideas and thoughts. Built using **Node.js**, **Express.js**, **MongoDB**, and **EJS**, this app provides a secure and user-friendly platform for sharing and discovering thoughts.
+**ThinkTank** is a web application that allows users to share and store their ideas. The application supports full CRUD (Create, Read, Update, Delete) functionality, enabling users to manage their thoughts easily. It is developed using Node.js, Express.js, MongoDB for database management, and EJS for rendering dynamic views.
 
 
 
