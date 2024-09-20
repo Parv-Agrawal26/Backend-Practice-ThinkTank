@@ -42,7 +42,7 @@ app.post("/new/register", async (req, res) => {
       });
       const token = jwt.sign({ email: email }, "secret");
       res.cookie("token", token);
-      await user.populate("posts")
+      await user.populate("posts");
       res.render("home", { user });
     });
   });
@@ -57,7 +57,7 @@ app.post("/new/login", async (req, res) => {
       if (result) {
         const token = jwt.sign({ email: email }, "secret");
         res.cookie("token", token);
-        await user.populate("posts")
+        await user.populate("posts");
         res.render("home", { user });
       } else {
         res.send("Password not matched");
@@ -70,9 +70,9 @@ app.post("/new/login", async (req, res) => {
   }
 });
 
-app.get("/home", isLoggedIn,async (req, res) => {
+app.get("/home", isLoggedIn, async (req, res) => {
   const user = req.user;
-  await user.populate("posts")
+  await user.populate("posts");
   res.render("home", { user });
 });
 
@@ -98,8 +98,35 @@ app.post("/newpost/:userid", isLoggedIn, async (req, res) => {
   res.redirect("/home");
 });
 
+app.get("/delete/:postid", isLoggedIn, async (req, res) => {
+  const user = req.user;
+  const postid = req.params.postid;
+  user.posts.splice(user.posts.indexOf(postid), 1);
+  await user.save();
+  await postModel.findByIdAndDelete(postid);
+  await user.populate("posts");
+  res.render("home", { user });
+});
+
+app.get("/update/:postid", isLoggedIn, async (req, res) => {
+  const postid = req.params.postid;
+  const post = await postModel.findOne({_id:postid})
+  res.render("update", { post });
+});
+
+app.post("/update/:postid", isLoggedIn, async (req, res) => {
+  const postid = req.params.postid;
+  const content = req.body.content
+  await postModel.findByIdAndUpdate({ _id: postid }, {content:content});
+  const user = req.user
+  await user.populate('posts')
+  res.render('home', {user})
+})
+
+
+
 async function isLoggedIn(req, res, next) {
-  if (req.cookies.token !== "") {
+  if (req.cookies.token && req.cookies.token !== "") {
     const decoded = jwt.verify(req.cookies.token, "secret");
     const email = decoded.email;
     req.user = await userModel.findOne({ email: email }).exec();

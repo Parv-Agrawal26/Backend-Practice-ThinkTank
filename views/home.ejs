@@ -6,7 +6,9 @@
     <title>User Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center">
+  <body
+    class="bg-gray-100 min-h-screen flex flex-col items-center justify-center"
+  >
     <div class="bg-white p-8 shadow-lg rounded-lg w-full max-w-md">
       <h1 class="text-2xl font-bold text-gray-800 mb-4">
         Welcome, <%= user.name %> of age <%= user.age %>
@@ -21,8 +23,10 @@
           class="w-full bg-red-500 text-white font-semibold py-2 rounded-lg hover:bg-red-600 transition duration-300"
         />
       </form>
-      
-      <h3 class="text-lg font-semibold text-gray-800 mb-3">Post Your Thought</h3>
+
+      <h3 class="text-lg font-semibold text-gray-800 mb-3">
+        Post Your Thought
+      </h3>
       <form action="/newpost/<%= user._id %>" method="post" class="mb-6">
         <textarea
           name="content"
@@ -37,10 +41,24 @@
       </form>
 
       <h3 class="text-lg font-semibold text-gray-800 mb-3">Your Posts</h3>
-      <% user.posts.forEach(post => { %>
-        <div class="bg-gray-50 p-4 rounded-lg mb-3 shadow-sm">
-          <h4 class="text-gray-700"><%= post.content %></h4>
+      <% user.posts.reverse().forEach(post => { %>
+      <div class="bg-gray-50 p-4 rounded-lg mb-3 shadow-sm">
+        <div class="flex justify-between">
+          <p class="text-gray-400 text-sm mb-3">
+            <%= new Date(post.date).toLocaleDateString('en-IN', { year:
+            'numeric', month: 'long', day: 'numeric' }) %>
+          </p>
+          <p class="text-gray-400 text-sm mb-3">
+            <%= new Date(post.date).toLocaleTimeString('en-IN', { hour:
+            '2-digit', minute: '2-digit' }) %>
+          </p>
         </div>
+        <h4 class="text-gray-900"><%= post.content %></h4>
+        <div class="flex justify-between mt-4">
+          <a href="/update/<%= post._id %>" class="text-green-500">Edit</a>
+          <a href="/delete/<%= post._id %>" class="text-red-500">Delete</a>
+        </div>
+      </div>
       <% }) %>
     </div>
   </body>
